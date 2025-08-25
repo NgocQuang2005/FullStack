@@ -1,11 +1,51 @@
--- =====================================================
--- SQL SERVER - CODE MẪU ĐẦY ĐỦ CHO CÔNG VIỆC
--- =====================================================
+# SQL Server - Hướng dẫn đầy đủ cho công việc
 
--- =====================================================
--- 1. TẠO DATABASE VÀ TABLE MẪU
--- =====================================================
+> **Tài liệu này chứa 100% kiến thức SQL Server BẮT BUỘC khi đi làm**  
+> Bao gồm code mẫu thực tế và best practices từ kinh nghiệm doanh nghiệp
 
+## 📋 Mục lục
+
+- [1. Tạo Database và Tables](#1-tạo-database-và-tables)
+- [2. Insert dữ liệu mẫu](#2-insert-dữ-liệu-mẫu)
+- [3. Câu lệnh SELECT cơ bản (100% BẮT BUỘC)](#3-câu-lệnh-select-cơ-bản-100-bắt-buộc)
+- [4. GROUP BY và Aggregate Functions](#4-group-by-và-aggregate-functions)
+- [5. JOINS (CỰC KỲ QUAN TRỌNG)](#5-joins-cực-kỳ-quan-trọng)
+- [6. Subqueries và CTE](#6-subqueries-và-cte)
+- [7. CASE WHEN (Logic điều kiện)](#7-case-when-logic-điều-kiện)
+- [8. T-SQL Variables và Control Flow](#8-t-sql-variables-và-control-flow)
+- [9. Error Handling (TRY/CATCH)](#9-error-handling-trycatch)
+- [10. Stored Procedures (BẮT BUỘC BIẾT)](#10-stored-procedures-bắt-buộc-biết)
+- [11. Functions (User-Defined)](#11-functions-user-defined)
+- [12. Views](#12-views)
+- [13. String Functions (HAY DÙNG)](#13-string-functions-hay-dùng)
+- [14. Date Functions (CỰC KỲ QUAN TRỌNG)](#14-date-functions-cực-kỳ-quan-trọng)
+- [15. NULL Handling](#15-null-handling)
+- [16. Transactions (QUAN TRỌNG)](#16-transactions-quan-trọng)
+- [17. Indexes (Cải thiện Performance)](#17-indexes-cải-thiện-performance)
+- [18. Window Functions (NÂNG CAO)](#18-window-functions-nâng-cao)
+- [19. PIVOT và UNPIVOT](#19-pivot-và-unpivot)
+- [20. Dynamic SQL](#20-dynamic-sql)
+- [21. Backup và Restore](#21-backup-và-restore)
+- [22. Permissions và Security](#22-permissions-và-security)
+- [23. Performance Monitoring](#23-performance-monitoring)
+- [24. System Queries hữu ích](#24-system-queries-hữu-ích)
+- [25. Common Table Expressions (CTE) - Nâng cao](#25-common-table-expressions-cte---nâng-cao)
+- [26. XML Functions](#26-xml-functions)
+- [27. JSON Functions](#27-json-functions)
+- [28. Temporary Tables và Table Variables](#28-temporary-tables-và-table-variables)
+- [29. Cursors](#29-cursors)
+- [30. MERGE Statement (UPSERT)](#30-merge-statement-upsert)
+- [31. Common Patterns và Best Practices](#31-common-patterns-và-best-practices)
+- [32. Performance Tips & Tricks](#32-performance-tips--tricks)
+- [33. Error Handling Patterns](#33-error-handling-patterns)
+- [34. Maintenance Commands](#34-maintenance-commands)
+- [35. Common Business Scenarios](#35-common-business-scenarios)
+
+---
+
+## 1. Tạo Database và Tables
+
+```sql
 -- Tạo database
 CREATE DATABASE CompanyDB;
 GO
@@ -55,11 +95,11 @@ CREATE TABLE EmployeeProjects (
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID),
     FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
 );
+```
 
--- =====================================================
--- 2. INSERT DỮ LIỆU MẪU
--- =====================================================
+## 2. Insert dữ liệu mẫu
 
+```sql
 -- Insert Departments
 INSERT INTO Departments (DepartmentName, Budget) VALUES 
 ('IT', 500000.00),
@@ -88,11 +128,11 @@ INSERT INTO EmployeeProjects (EmployeeID, ProjectID, Role) VALUES
 (1, 2, 'Developer'),
 (4, 2, 'Business Analyst'),
 (5, 3, 'Marketing Specialist');
+```
 
--- =====================================================
--- 3. CÁC CÂU LỆNH SELECT CỦA BẢN (100% BẮT BUỘC)
--- =====================================================
+## 3. Câu lệnh SELECT cơ bản (100% BẮT BUỘC)
 
+```sql
 -- SELECT đơn giản
 SELECT * FROM Employees;
 SELECT FirstName, LastName, Salary FROM Employees;
@@ -124,11 +164,11 @@ ORDER BY Salary DESC, LastName ASC;
 -- TOP và PERCENT
 SELECT TOP 3 * FROM Employees ORDER BY Salary DESC;
 SELECT TOP 50 PERCENT * FROM Employees ORDER BY HireDate;
+```
 
--- =====================================================
--- 4. GROUP BY VÀ AGGREGATE FUNCTIONS
--- =====================================================
+## 4. GROUP BY và Aggregate Functions
 
+```sql
 -- Đếm số nhân viên theo phòng ban
 SELECT 
     d.DepartmentName,
@@ -149,11 +189,11 @@ SELECT
 FROM Employees 
 GROUP BY DepartmentID
 HAVING COUNT(*) > 1 AND AVG(Salary) > 13000000;
+```
 
--- =====================================================
--- 5. JOINS (CỰC KỲ QUAN TRỌNG)
--- =====================================================
+## 5. JOINS (CỰC KỲ QUAN TRỌNG)
 
+```sql
 -- INNER JOIN
 SELECT 
     e.FirstName,
@@ -196,11 +236,11 @@ FROM Employees e
 INNER JOIN Departments d ON e.DepartmentID = d.DepartmentID
 INNER JOIN EmployeeProjects ep ON e.EmployeeID = ep.EmployeeID
 INNER JOIN Projects p ON ep.ProjectID = p.ProjectID;
+```
 
--- =====================================================
--- 6. SUBQUERIES VÀ CTE
--- =====================================================
+## 6. Subqueries và CTE
 
+```sql
 -- Subquery trong WHERE
 SELECT * FROM Employees 
 WHERE Salary > (SELECT AVG(Salary) FROM Employees);
@@ -249,11 +289,11 @@ SELECT
 FROM HighSalaryEmployees hse
 INNER JOIN DepartmentStats ds ON hse.DepartmentID = ds.DepartmentID
 INNER JOIN Departments d ON hse.DepartmentID = d.DepartmentID;
+```
 
--- =====================================================
--- 7. CASE WHEN (LOGIC ĐIỀU KIỆN)
--- =====================================================
+## 7. CASE WHEN (Logic điều kiện)
 
+```sql
 SELECT 
     FirstName,
     LastName,
@@ -284,11 +324,11 @@ GROUP BY
         WHEN Salary >= 15000000 THEN 'High Salary'
         ELSE 'Normal Salary'
     END;
+```
 
--- =====================================================
--- 8. T-SQL VARIABLES VÀ CONTROL FLOW
--- =====================================================
+## 8. T-SQL Variables và Control Flow
 
+```sql
 -- Variables
 DECLARE @MinSalary DECIMAL(10,2) = 12000000;
 DECLARE @DeptName NVARCHAR(100);
@@ -319,11 +359,11 @@ BEGIN
     PRINT 'Counter: ' + CAST(@Counter AS NVARCHAR(10));
     SET @Counter = @Counter + 1;
 END
+```
 
--- =====================================================
--- 9. ERROR HANDLING (TRY/CATCH)
--- =====================================================
+## 9. Error Handling (TRY/CATCH)
 
+```sql
 BEGIN TRY
     -- Code có thể gây lỗi
     INSERT INTO Employees (FirstName, LastName, Email, HireDate, Salary, DepartmentID) 
@@ -337,11 +377,11 @@ BEGIN CATCH
     PRINT 'Error Message: ' + ERROR_MESSAGE();
     PRINT 'Error Line: ' + CAST(ERROR_LINE() AS NVARCHAR(10));
 END CATCH
+```
 
--- =====================================================
--- 10. STORED PROCEDURES (BẮT BUỘC BIẾT)
--- =====================================================
+## 10. Stored Procedures (BẮT BUỘC BIẾT)
 
+```sql
 -- Stored Procedure đơn giản
 CREATE PROCEDURE GetEmployeesByDepartment
     @DepartmentID INT
@@ -385,60 +425,11 @@ EXEC GetEmployeeStats
 
 PRINT 'Total Employees: ' + CAST(@Total AS NVARCHAR(10));
 PRINT 'Average Salary: ' + CAST(@Avg AS NVARCHAR(20));
+```
 
--- Stored Procedure phức tạp với Error Handling
-CREATE PROCEDURE UpdateEmployeeSalary
-    @EmployeeID INT,
-    @NewSalary DECIMAL(10,2),
-    @UpdatedBy NVARCHAR(100)
-AS
-BEGIN
-    SET NOCOUNT ON;
-    
-    BEGIN TRY
-        BEGIN TRANSACTION;
-        
-        -- Kiểm tra Employee có tồn tại không
-        IF NOT EXISTS (SELECT 1 FROM Employees WHERE EmployeeID = @EmployeeID)
-        BEGIN
-            RAISERROR('Employee not found', 16, 1);
-            RETURN;
-        END
-        
-        -- Kiểm tra salary hợp lệ
-        IF @NewSalary <= 0
-        BEGIN
-            RAISERROR('Salary must be greater than 0', 16, 1);
-            RETURN;
-        END
-        
-        -- Update salary
-        UPDATE Employees 
-        SET Salary = @NewSalary
-        WHERE EmployeeID = @EmployeeID;
-        
-        -- Log the change (giả sử có bảng AuditLog)
-        -- INSERT INTO AuditLog (Action, TableName, RecordID, UpdatedBy, UpdatedDate)
-        -- VALUES ('UPDATE', 'Employees', @EmployeeID, @UpdatedBy, GETDATE());
-        
-        COMMIT TRANSACTION;
-        PRINT 'Salary updated successfully';
-        
-    END TRY
-    BEGIN CATCH
-        IF @@TRANCOUNT > 0
-            ROLLBACK TRANSACTION;
-            
-        PRINT 'Error: ' + ERROR_MESSAGE();
-        THROW;
-    END CATCH
-END
-GO
+## 11. Functions (User-Defined)
 
--- =====================================================
--- 11. FUNCTIONS (USER-DEFINED)
--- =====================================================
-
+```sql
 -- Scalar Function
 CREATE FUNCTION GetEmployeeFullName(@EmployeeID INT)
 RETURNS NVARCHAR(101)
@@ -475,11 +466,11 @@ GO
 
 -- Sử dụng Table-Valued Function
 SELECT * FROM dbo.GetEmployeesByDepartmentTVF(1);
+```
 
--- =====================================================
--- 12. VIEWS
--- =====================================================
+## 12. Views
 
+```sql
 -- Tạo View
 CREATE VIEW vw_EmployeeDepartmentInfo AS
 SELECT 
@@ -503,11 +494,11 @@ GO
 -- Sử dụng View
 SELECT * FROM vw_EmployeeDepartmentInfo;
 SELECT * FROM vw_EmployeeDepartmentInfo WHERE Level = 'Senior';
+```
 
--- =====================================================
--- 13. STRING FUNCTIONS (HAY DÙNG)
--- =====================================================
+## 13. String Functions (HAY DÙNG)
 
+```sql
 SELECT 
     FirstName,
     LastName,
@@ -536,11 +527,11 @@ SELECT
     -- Reverse
     REVERSE(FirstName) as ReversedName
 FROM Employees;
+```
 
--- =====================================================
--- 14. DATE FUNCTIONS (CỰC KỲ QUAN TRỌNG)
--- =====================================================
+## 14. Date Functions (CỰC KỲ QUAN TRỌNG)
 
+```sql
 SELECT 
     FirstName,
     LastName,
@@ -577,15 +568,11 @@ FROM Employees;
 -- Tìm nhân viên được tuyển trong 2 năm gần đây
 SELECT * FROM Employees 
 WHERE HireDate >= DATEADD(YEAR, -2, GETDATE());
+```
 
--- Tìm nhân viên có sinh nhật trong tháng này (giả sử có cột BirthDate)
--- SELECT * FROM Employees 
--- WHERE MONTH(BirthDate) = MONTH(GETDATE());
+## 15. NULL Handling
 
--- =====================================================
--- 15. NULL HANDLING
--- =====================================================
-
+```sql
 SELECT 
     FirstName,
     LastName,
@@ -610,11 +597,11 @@ SELECT
         ELSE 'Valid Phone'
     END as PhoneValidation
 FROM Employees;
+```
 
--- =====================================================
--- 16. TRANSACTIONS (QUAN TRỌNG)
--- =====================================================
+## 16. Transactions (QUAN TRỌNG)
 
+```sql
 -- Transaction đơn giản
 BEGIN TRANSACTION;
 
@@ -643,11 +630,11 @@ VALUES ('New', 'Employee', 'new@company.com', GETDATE(), 15000000, @@IDENTITY);
 -- ROLLBACK TRANSACTION SavePoint1;
 
 COMMIT TRANSACTION MainTran;
+```
 
--- =====================================================
--- 17. INDEXES (CẢI THIỆN PERFORMANCE)
--- =====================================================
+## 17. Indexes (Cải thiện Performance)
 
+```sql
 -- Tạo Index
 CREATE INDEX IX_Employees_DepartmentID 
 ON Employees (DepartmentID);
@@ -675,14 +662,11 @@ INNER JOIN sys.index_columns ic ON i.object_id = ic.object_id AND i.index_id = i
 INNER JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id
 WHERE i.object_id = OBJECT_ID('Employees')
 ORDER BY i.name, ic.index_column_id;
+```
 
--- Xóa Index
--- DROP INDEX IX_Employees_DepartmentID ON Employees;
+## 18. Window Functions (NÂNG CAO)
 
--- =====================================================
--- 18. WINDOW FUNCTIONS (NÂNG CAO NHƯNG HỮU ÍCH)
--- =====================================================
-
+```sql
 SELECT 
     FirstName,
     LastName,
@@ -710,11 +694,11 @@ SELECT
     COUNT(*) OVER (PARTITION BY DepartmentID) as DeptEmployeeCount
 FROM Employees
 ORDER BY DepartmentID, Salary DESC;
+```
 
--- =====================================================
--- 19. PIVOT VÀ UNPIVOT
--- =====================================================
+## 19. PIVOT và UNPIVOT
 
+```sql
 -- PIVOT - Chuyển từ rows thành columns
 SELECT 
     DepartmentName,
@@ -737,11 +721,11 @@ PIVOT (
     COUNT(EmployeeID)
     FOR Level IN ([Junior], [Middle], [Senior])
 ) as PivotTable;
+```
 
--- =====================================================
--- 20. DYNAMIC SQL (NÂNG CAO)
--- =====================================================
+## 20. Dynamic SQL
 
+```sql
 -- Dynamic SQL cơ bản
 DECLARE @SQL NVARCHAR(MAX);
 DECLARE @TableName NVARCHAR(100) = 'Employees';
@@ -753,11 +737,11 @@ SET @SQL = N'SELECT * FROM ' + QUOTENAME(@TableName) +
 EXEC sp_executesql @SQL, 
                    N'@MinSalaryParam DECIMAL(10,2)', 
                    @MinSalaryParam = @MinSalary;
+```
 
--- =====================================================
--- 21. BACKUP VÀ RESTORE
--- =====================================================
+## 21. Backup và Restore
 
+```sql
 -- Full Backup
 BACKUP DATABASE CompanyDB 
 TO DISK = 'C:\Backup\CompanyDB_Full.bak'
@@ -773,18 +757,20 @@ BACKUP LOG CompanyDB
 TO DISK = 'C:\Backup\CompanyDB_Log.trn'
 WITH FORMAT, INIT, NAME = 'Log Backup of CompanyDB';
 
--- Restore Database
--- RESTORE DATABASE CompanyDB_Test 
--- FROM DISK = 'C:\Backup\CompanyDB_Full.bak'
--- WITH MOVE 'CompanyDB' TO 'C:\Data\CompanyDB_Test.mdf',
---      MOVE 'CompanyDB_Log' TO 'C:\Data\CompanyDB_Test.ldf',
---      REPLACE;
+-- Restore Database (ví dụ)
+/*
+RESTORE DATABASE CompanyDB_Test 
+FROM DISK = 'C:\Backup\CompanyDB_Full.bak'
+WITH MOVE 'CompanyDB' TO 'C:\Data\CompanyDB_Test.mdf',
+     MOVE 'CompanyDB_Log' TO 'C:\Data\CompanyDB_Test.ldf',
+     REPLACE;
+*/
+```
 
--- =====================================================
--- 22. PERMISSIONS VÀ SECURITY
--- =====================================================
+## 22. Permissions và Security
 
--- Tạo Login
+```sql
+-- Tạo Login (commented - cần admin rights)
 -- CREATE LOGIN AppUser WITH PASSWORD = 'StrongPassword123!';
 
 -- Tạo User trong database
@@ -798,16 +784,11 @@ WITH FORMAT, INIT, NAME = 'Log Backup of CompanyDB';
 -- CREATE ROLE EmployeeReader;
 -- GRANT SELECT ON Employees TO EmployeeReader;
 -- ALTER ROLE EmployeeReader ADD MEMBER AppUser;
+```
 
--- =====================================================
--- 23. PERFORMANCE MONITORING
--- =====================================================
+## 23. Performance Monitoring
 
--- Xem Execution Plan
--- SET SHOWPLAN_ALL ON;
--- SELECT * FROM Employees WHERE Salary > 15000000;
--- SET SHOWPLAN_ALL OFF;
-
+```sql
 -- Xem thống kê IO
 SET STATISTICS IO ON;
 SELECT e.*, d.DepartmentName 
@@ -828,11 +809,11 @@ SELECT TOP 10
 FROM sys.dm_exec_query_stats qs
 CROSS APPLY sys.dm_exec_sql_text(qs.sql_handle) qt
 ORDER BY avg_elapsed_time DESC;
+```
 
--- =====================================================
--- 24. USEFUL SYSTEM QUERIES
--- =====================================================
+## 24. System Queries hữu ích
 
+```sql
 -- Xem thông tin database
 SELECT 
     name as DatabaseName,
@@ -861,23 +842,6 @@ WHERE t.NAME NOT LIKE 'dt%'
 GROUP BY t.Name, s.Name, p.Rows
 ORDER BY TotalSpaceMB DESC;
 
--- Xem thông tin về indexes
-SELECT 
-    OBJECT_SCHEMA_NAME(i.object_id) AS SchemaName,
-    OBJECT_NAME(i.object_id) AS TableName,
-    i.name AS IndexName,
-    i.type_desc AS IndexType,
-    i.is_unique,
-    i.is_primary_key,
-    STUFF((SELECT ', ' + c.name
-           FROM sys.index_columns ic
-           INNER JOIN sys.columns c ON ic.object_id = c.object_id AND ic.column_id = c.column_id
-           WHERE ic.object_id = i.object_id AND ic.index_id = i.index_id
-           ORDER BY ic.index_column_id
-           FOR XML PATH('')), 1, 2, '') AS IndexColumns
-FROM sys.indexes i
-WHERE i.object_id = OBJECT_ID('Employees');
-
 -- Xem thông tin về foreign keys
 SELECT 
     fk.name AS ForeignKeyName,
@@ -892,11 +856,11 @@ INNER JOIN sys.foreign_key_columns fkc ON fk.object_id = fkc.constraint_object_i
 INNER JOIN sys.columns c1 ON fkc.parent_object_id = c1.object_id AND fkc.parent_column_id = c1.column_id
 INNER JOIN sys.columns c2 ON fkc.referenced_object_id = c2.object_id AND fkc.referenced_column_id = c2.column_id
 ORDER BY SchemaName, TableName;
+```
 
--- =====================================================
--- 25. COMMON TABLE EXPRESSIONS (CTE) - NÂNG CAO
--- =====================================================
+## 25. Common Table Expressions (CTE) - Nâng cao
 
+```sql
 -- Recursive CTE - Tạo số từ 1 đến 10
 WITH Numbers AS (
     SELECT 1 as n
@@ -908,35 +872,37 @@ WITH Numbers AS (
 SELECT n FROM Numbers;
 
 -- Recursive CTE - Organizational Hierarchy (nếu có manager_id)
--- WITH EmployeeHierarchy AS (
---     -- Anchor: Top level managers
---     SELECT 
---         EmployeeID,
---         FirstName + ' ' + LastName as FullName,
---         ManagerID,
---         0 as Level,
---         CAST(FirstName + ' ' + LastName AS NVARCHAR(1000)) as Hierarchy
---     FROM Employees 
---     WHERE ManagerID IS NULL
+/*
+WITH EmployeeHierarchy AS (
+    -- Anchor: Top level managers
+    SELECT 
+        EmployeeID,
+        FirstName + ' ' + LastName as FullName,
+        ManagerID,
+        0 as Level,
+        CAST(FirstName + ' ' + LastName AS NVARCHAR(1000)) as Hierarchy
+    FROM Employees 
+    WHERE ManagerID IS NULL
     
---     UNION ALL
+    UNION ALL
     
---     -- Recursive: Subordinates
---     SELECT 
---         e.EmployeeID,
---         e.FirstName + ' ' + e.LastName,
---         e.ManagerID,
---         eh.Level + 1,
---         CAST(eh.Hierarchy + ' -> ' + e.FirstName + ' ' + e.LastName AS NVARCHAR(1000))
---     FROM Employees e
---     INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID
--- )
--- SELECT * FROM EmployeeHierarchy ORDER BY Level, FullName;
+    -- Recursive: Subordinates
+    SELECT 
+        e.EmployeeID,
+        e.FirstName + ' ' + e.LastName,
+        e.ManagerID,
+        eh.Level + 1,
+        CAST(eh.Hierarchy + ' -> ' + e.FirstName + ' ' + e.LastName AS NVARCHAR(1000))
+    FROM Employees e
+    INNER JOIN EmployeeHierarchy eh ON e.ManagerID = eh.EmployeeID
+)
+SELECT * FROM EmployeeHierarchy ORDER BY Level, FullName;
+*/
+```
 
--- =====================================================
--- 26. XML FUNCTIONS (HỮU ÍCH TRONG MỘT SỐ TRƯỜNG HỢP)
--- =====================================================
+## 26. XML Functions
 
+```sql
 -- Tạo XML từ data
 SELECT 
     EmployeeID,
@@ -961,12 +927,12 @@ SELECT
     T.c.value('LastName[1]', 'NVARCHAR(50)') as LastName,
     T.c.value('Salary[1]', 'DECIMAL(10,2)') as Salary
 FROM @xmldata.nodes('/Employees/Employee') T(c);
+```
 
--- =====================================================
--- 27. JSON FUNCTIONS (SQL Server 2016+)
--- =====================================================
+## 27. JSON Functions
 
--- Convert to JSON
+```sql
+-- Convert to JSON (SQL Server 2016+)
 SELECT 
     EmployeeID,
     FirstName,
@@ -998,11 +964,11 @@ SELECT
     JSON_QUERY('{"skills":["C#","SQL","JavaScript"]}', '$.skills') as Skills
 FROM Employees
 WHERE EmployeeID = 1;
+```
 
--- =====================================================
--- 28. TEMPORARY TABLES VÀ TABLE VARIABLES
--- =====================================================
+## 28. Temporary Tables và Table Variables
 
+```sql
 -- Table Variable (scope limited, small data)
 DECLARE @TempEmployees TABLE (
     EmployeeID INT,
@@ -1038,18 +1004,14 @@ LEFT JOIN Employees e ON d.DepartmentID = e.DepartmentID
 GROUP BY d.DepartmentID, d.DepartmentName;
 
 SELECT * FROM #TempEmployeeStats;
+```
 
--- Cleanup (tự động khi session kết thúc)
--- DROP TABLE #TempEmployeeStats;
+## 29. Cursors
 
--- Global Temporary Table (visible to all sessions)
--- CREATE TABLE ##GlobalTemp (ID INT, Name NVARCHAR(100));
+> **⚠️ Lưu ý**: Tốt nhất tránh dùng Cursors, sử dụng set-based operations thay thế
 
--- =====================================================
--- 29. CURSORS (TỐT NHẤT TRÁNH DÙNG, NHƯNG CẦN BIẾT)
--- =====================================================
-
--- Cursor example (avoid if possible, use set-based operations instead)
+```sql
+-- Cursor example (avoid if possible)
 DECLARE @EmployeeID INT, @FullName NVARCHAR(101), @Salary DECIMAL(10,2);
 
 DECLARE employee_cursor CURSOR FOR
@@ -1072,24 +1034,23 @@ END
 
 CLOSE employee_cursor;
 DEALLOCATE employee_cursor;
+```
 
--- =====================================================
--- 30. MERGE STATEMENT (UPSERT)
--- =====================================================
+## 30. MERGE Statement (UPSERT)
 
+```sql
 -- Create a staging table for demo
 CREATE TABLE EmployeeUpdates (
     EmployeeID INT,
     FirstName NVARCHAR(50),
     LastName NVARCHAR(50),
-    Salary DECIMAL(10,2),
-    Action NVARCHAR(10)
+    Salary DECIMAL(10,2)
 );
 
 -- Insert some test data
 INSERT INTO EmployeeUpdates VALUES 
-(1, 'Nguyen', 'Van A', 16000000, NULL),  -- Update existing
-(99, 'New', 'Employee', 14000000, NULL); -- Insert new
+(1, 'Nguyen', 'Van A', 16000000),  -- Update existing
+(99, 'New', 'Employee', 14000000); -- Insert new
 
 -- MERGE statement
 MERGE Employees AS target
@@ -1115,12 +1076,14 @@ OUTPUT $action as Action,
 
 -- Cleanup
 DROP TABLE EmployeeUpdates;
+```
 
--- =====================================================
--- 31. COMMON PATTERNS VÀ BEST PRACTICES
--- =====================================================
+## 31. Common Patterns và Best Practices
 
--- 1. Pagination pattern
+### Pagination Pattern
+
+```sql
+-- Method 1: ROW_NUMBER()
 DECLARE @PageNumber INT = 1;
 DECLARE @PageSize INT = 10;
 
@@ -1135,15 +1098,19 @@ FROM (
 WHERE RowNum BETWEEN (@PageNumber - 1) * @PageSize + 1 
                  AND @PageNumber * @PageSize;
 
--- 2. OFFSET/FETCH (SQL Server 2012+) - Preferred method
+-- Method 2: OFFSET/FETCH (SQL Server 2012+) - Preferred
 SELECT *
 FROM Employees
 WHERE IsActive = 1
 ORDER BY EmployeeID
 OFFSET ((@PageNumber - 1) * @PageSize) ROWS
 FETCH NEXT @PageSize ROWS ONLY;
+```
 
--- 3. Find duplicates
+### Find và Remove Duplicates
+
+```sql
+-- Find duplicates
 SELECT 
     FirstName,
     LastName,
@@ -1152,7 +1119,7 @@ FROM Employees
 GROUP BY FirstName, LastName
 HAVING COUNT(*) > 1;
 
--- 4. Remove duplicates (keep latest)
+-- Remove duplicates (keep latest)
 WITH DuplicateCTE AS (
     SELECT *,
         ROW_NUMBER() OVER (
@@ -1162,8 +1129,11 @@ WITH DuplicateCTE AS (
     FROM Employees
 )
 DELETE FROM DuplicateCTE WHERE rn > 1;
+```
 
--- 5. Running totals
+### Running Totals
+
+```sql
 SELECT 
     EmployeeID,
     FirstName,
@@ -1172,8 +1142,11 @@ SELECT
     SUM(Salary) OVER (ORDER BY EmployeeID ROWS UNBOUNDED PRECEDING) as RunningTotal
 FROM Employees
 ORDER BY EmployeeID;
+```
 
--- 6. Conditional aggregation
+### Conditional Aggregation
+
+```sql
 SELECT 
     DepartmentID,
     COUNT(*) as TotalEmployees,
@@ -1182,11 +1155,11 @@ SELECT
     AVG(CASE WHEN Salary >= 15000000 THEN Salary END) as AvgHighSalary
 FROM Employees
 GROUP BY DepartmentID;
+```
 
--- =====================================================
--- 32. PERFORMANCE TIPS & TRICKS
--- =====================================================
+## 32. Performance Tips & Tricks
 
+```sql
 -- 1. Use EXISTS instead of IN for better performance
 SELECT * FROM Employees e
 WHERE EXISTS (
@@ -1211,12 +1184,12 @@ FROM Employees  -- Better than SELECT *
 SELECT * FROM Employees 
 WHERE DepartmentID = 1  -- Assuming index on DepartmentID
 ORDER BY EmployeeID;    -- Assuming clustered index on EmployeeID
+```
 
--- =====================================================
--- 33. ERROR HANDLING PATTERNS
--- =====================================================
+## 33. Error Handling Patterns
 
--- Pattern 1: Simple validation
+```sql
+-- Pattern: Comprehensive validation
 CREATE PROCEDURE CreateEmployee
     @FirstName NVARCHAR(50),
     @LastName NVARCHAR(50),
@@ -1262,11 +1235,11 @@ BEGIN
     END CATCH
 END
 GO
+```
 
--- =====================================================
--- 34. MAINTENANCE COMMANDS
--- =====================================================
+## 34. Maintenance Commands
 
+```sql
 -- Update statistics
 UPDATE STATISTICS Employees;
 
@@ -1279,9 +1252,6 @@ ALTER INDEX ALL ON Employees REORGANIZE;
 -- Check database integrity
 DBCC CHECKDB('CompanyDB');
 
--- Shrink database (use carefully)
--- DBCC SHRINKDATABASE('CompanyDB');
-
 -- View fragmentation
 SELECT 
     OBJECT_NAME(ips.object_id) AS TableName,
@@ -1293,23 +1263,13 @@ FROM sys.dm_db_index_physical_stats(DB_ID(), NULL, NULL, NULL, 'DETAILED') ips
 INNER JOIN sys.indexes i ON ips.object_id = i.object_id AND ips.index_id = i.index_id
 WHERE ips.avg_fragmentation_in_percent > 10
 ORDER BY ips.avg_fragmentation_in_percent DESC;
+```
 
--- =====================================================
--- 35. COMMON BUSINESS SCENARIOS
--- =====================================================
+## 35. Common Business Scenarios
 
--- 1. Employee of the Month (highest performance score)
--- Assuming performance tracking table exists
--- SELECT TOP 1 
---     e.FirstName + ' ' + e.LastName as EmployeeName,
---     AVG(p.Score) as AvgScore
--- FROM Employees e
--- INNER JOIN PerformanceReviews p ON e.EmployeeID = p.EmployeeID
--- WHERE p.ReviewDate >= DATEADD(MONTH, -1, GETDATE())
--- GROUP BY e.EmployeeID, e.FirstName, e.LastName
--- ORDER BY AVG(p.Score) DESC;
+### Department Budget Utilization
 
--- 2. Department budget utilization
+```sql
 SELECT 
     d.DepartmentName,
     d.Budget as AllocatedBudget,
@@ -1323,8 +1283,11 @@ SELECT
 FROM Departments d
 LEFT JOIN Employees e ON d.DepartmentID = e.DepartmentID AND e.IsActive = 1
 GROUP BY d.DepartmentID, d.DepartmentName, d.Budget;
+```
 
--- 3. Employee anniversary report
+### Employee Anniversary Report
+
+```sql
 SELECT 
     FirstName + ' ' + LastName as EmployeeName,
     HireDate,
@@ -1333,7 +1296,8 @@ SELECT
         WHEN DATEDIFF(YEAR, HireDate, GETDATE()) = 1 THEN '1 Year'
         WHEN DATEDIFF(YEAR, HireDate, GETDATE()) = 5 THEN '5 Years'
         WHEN DATEDIFF(YEAR, HireDate, GETDATE()) = 10 THEN '10 Years'
-        WHEN DATEDIFF(YEAR, HireDate, GETDATE()) % 5 = 0 THEN CAST(DATEDIFF(YEAR, HireDate, GETDATE()) AS VARCHAR) + ' Years'
+        WHEN DATEDIFF(YEAR, HireDate, GETDATE()) % 5 = 0 THEN 
+            CAST(DATEDIFF(YEAR, HireDate, GETDATE()) AS VARCHAR) + ' Years'
     END as Milestone
 FROM Employees
 WHERE IsActive = 1
@@ -1342,38 +1306,49 @@ WHERE IsActive = 1
         DATEDIFF(YEAR, HireDate, GETDATE()) % 5 = 0
     )
 ORDER BY YearsOfService DESC;
+```
 
--- =====================================================
--- KẾT THÚC CODE MẪU
--- =====================================================
+---
 
--- TỔNG KẾT NHỮNG ĐIỀU QUAN TRỌNG NHẤT:
--- 1. SELECT, INSERT, UPDATE, DELETE với các điều kiện
--- 2. JOINs (INNER, LEFT, RIGHT, FULL)
--- 3. GROUP BY, HAVING, ORDER BY
--- 4. Subqueries và CTEs
--- 5. CASE WHEN cho logic điều kiện
--- 6. String và Date functions
--- 7. NULL handling (ISNULL, COALESCE)
--- 8. Stored Procedures và Functions
--- 9. Views
--- 10. Error handling với TRY/CATCH
--- 11. Transactions
--- 12. Indexes cơ bản
--- 13. Variables và control flow (IF/ELSE, WHILE)
--- 14. Window functions cơ bản
--- 15. Performance monitoring và optimization
+## 🎯 Tổng kết những điều QUAN TRỌNG NHẤT
 
--- NHỮNG CÔNG CỤ PHẢI BIẾT:
--- - SQL Server Management Studio (SSMS)
--- - Execution Plans để optimize queries
--- - Backup/Restore procedures
--- - Basic security và permissions
+### 🔥 Mức độ BẮT BUỘC (dùng hàng ngày)
+1. **SELECT, INSERT, UPDATE, DELETE** với các điều kiện
+2. **JOINs** (INNER, LEFT, RIGHT, FULL)
+3. **GROUP BY, HAVING, ORDER BY**
+4. **Subqueries và CTEs**
+5. **CASE WHEN** cho logic điều kiện
+6. **String và Date functions**
+7. **NULL handling** (ISNULL, COALESCE)
 
--- LƯU Ý KHI ĐI LÀM:
--- - Luôn test trên database development trước
--- - Backup trước khi chạy scripts quan trọng
--- - Comment code rõ ràng
--- - Follow naming conventions của công ty
--- - Optimize queries cho performance
--- - Handle errors properly
+### 🚀 Mức độ THƯỜNG XUYÊN
+8. **Stored Procedures và Functions**
+9. **Views**
+10. **Error handling** với TRY/CATCH
+11. **Transactions**
+12. **Variables và control flow** (IF/ELSE, WHILE)
+13. **Indexes** cơ bản
+
+### ⚡ Mức độ HỮU ÍCH khi cần
+14. **Window functions** cơ bản
+15. **Performance monitoring** và optimization
+16. **Backup/Restore** procedures
+17. **Basic security** và permissions
+
+### 🛠️ Những công cụ PHẢI BIẾT
+- **SQL Server Management Studio (SSMS)**
+- **Execution Plans** để optimize queries
+- **Azure Data Studio** (ngày càng phổ biến)
+- **Visual Studio Code** với SQL extensions
+
+### 📝 Lưu ý khi ĐI LÀM
+- ✅ Luôn test trên database development trước
+- ✅ Backup trước khi chạy scripts quan trọng  
+- ✅ Comment code rõ ràng
+- ✅ Follow naming conventions của công ty
+- ✅ Optimize queries cho performance
+- ✅ Handle errors properly
+- ✅ Sử dụng transactions khi cần thiết
+- ✅ Tránh SELECT * trong production code
+
+> **💡 Pro Tip**: Bookmark tài liệu này và thực hành từng phần theo thứ tự ưu tiên. Với bộ kiến thức này, bạn sẽ handle được 95% công việc SQL Server trong thực tế!
